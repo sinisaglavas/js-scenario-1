@@ -1,40 +1,59 @@
-let expenses = [];
+import {addExpense, renderExpenses, showTotal, highlightInput, deleteExpense, getExpenses} from "./src/functions.js";
+import {showToast} from "./src/toastMessage.js";
+import {closeModal, editExpense, showExpense} from "./src/modal.js";
+import {categories} from "./src/ui.js";
 
-function addExpense(name, amount) {
-    expenses.push({
-        name: name,
-        amount: amount
-    });
-}
+const historyDate = document.getElementById('history-date');
+historyDate.innerText = 'History (' + new Date().toLocaleDateString() + ')';
 
-function renderExpenses() {
-    let list = document.getElementById("list");
-    list.innerHTML = "";
+const nameInput = document.getElementById('name');
+const amountInput = document.getElementById('amount');
+const addBtn = document.getElementById('addBtn');
 
-    for (let i = 0; i < expenses.length; i++) {
-        list.innerHTML += "<li>" + expenses[i].name + " - " + expenses[i].amount + "</li>";
+addBtn.addEventListener("click", () => {
+    let name = nameInput.value.trim();
+    let amount = amountInput.value.trim();
+    let category = document.getElementById('category').value;
+
+    if (name === "" && amount === "") {
+        showToast("Please enter a name and amount expense!");
+        highlightInput(nameInput, 'input-error');
+        highlightInput(amountInput, 'input-error');
+        return;
     }
-}
 
-function getTotal() {
-    let total = 0;
-
-    for (let e of expenses) {
-        total += e.amount;
+    if (name === "") {
+        const statusExpense = document.getElementById("status-expense");
+        statusExpense.innerText = "Please enter a expense name!";
+        setTimeout(() => statusExpense.innerText = "", 3000);
+        highlightInput(nameInput, 'input-error');
+        return;
     }
 
-    return total;
-}
+    if (amount === "" || amount <= 0) {
+        const statusAmount = document.getElementById("status-amount");
+        statusAmount.innerText = "Please enter a valid expense amount!";
+        setTimeout(() => statusAmount.innerText = "", 3000);
+        highlightInput(amountInput, 'input-error');
+        return;
+    }
 
-function showTotal() {
-    document.getElementById("total").innerText = getTotal();
-}
+    showToast("Expense "+ name +" added successfully!");
+    setTimeout(() => {
+        nameInput.value = "";
+        amountInput.value = "";
+        }, 500);
 
-document.getElementById("addBtn").addEventListener("click", function () {
-    let name = document.getElementById("name").value;
-    let amount = document.getElementById("amount").value;
+    highlightInput(nameInput, 'input-success');
+    highlightInput(amountInput, 'input-success');
 
-    addExpense(name, amount);
+    addExpense(name, amount, category);
     renderExpenses();
     showTotal();
 });
+
+categories('category');
+deleteExpense();
+showExpense();
+editExpense();
+closeModal();
