@@ -1,4 +1,4 @@
-import {getExpenses, renderExpenses, showTotal, updateExpense} from "./functions.js";
+import {getExpenses, getTotal, renderExpenses, showTotal, updateExpense} from "./functions.js";
 import {categories} from "./ui.js";
 
 
@@ -36,8 +36,8 @@ export function editExpense() {
     saveAndClose.addEventListener('click', () => {
 
         updateExpense(index, editName.value, editAmount.value, editCategory.value);
-        renderExpenses();
-        showTotal();
+        renderExpenses(getExpenses());
+        showTotal(getTotal(getExpenses()));
 
         index = null;
 

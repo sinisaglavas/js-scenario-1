@@ -14,7 +14,7 @@ export function updateExpense(index, name, amount, category) {
     expenses[index] = {
         name: name,
         amount: amount,
-        category: category,
+        category: category || 'Others',
     };
 }
 
@@ -22,11 +22,11 @@ export function getExpenses() {
     return expenses;
 }
 
-export function renderExpenses() {
+export function renderExpenses(data) {
     const expensesDiv = document.getElementById('expenses-div');
     expensesDiv.innerHTML = '';
 
-    for (let i = 0; i < expenses.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         const newExpenseDiv = document.createElement("div");
         newExpenseDiv.id = 'new-expense';
 
@@ -35,14 +35,14 @@ export function renderExpenses() {
 
         const categorySpan = document.createElement("span");
         categorySpan.classList.add('category-badge');
-        if (expenses[i].category === 'Health') {
+        if (data[i].category === 'Health') {
             categorySpan.classList.add('health');
         }
 
-        categorySpan.innerText = expenses[i].category;
+        categorySpan.innerText = data[i].category;
 
         const amountSpan = document.createElement("span");
-        amountSpan.innerText = expenses[i].name + ': ' + expenses[i].amount;
+        amountSpan.innerText = data[i].name + ': ' + formatCurrency(data[i].amount);
 
         amountDiv.append(categorySpan, amountSpan);
 
@@ -65,6 +65,11 @@ export function renderExpenses() {
     }
 }
 
+export function noResultFound() {
+    const expensesDiv = document.getElementById('expenses-div');
+    expensesDiv.innerHTML = '<p>No results found</p>';
+}
+
 export function deleteExpense() {
     document.getElementById('expenses-div').addEventListener('click', (e) => {
 
@@ -75,25 +80,29 @@ export function deleteExpense() {
             if (index !== undefined) {
                 expenses.splice(Number(index), 1);
                 localStorage.setItem('expenses', JSON.stringify(expenses));
-                renderExpenses();
-                showTotal();
+                renderExpenses(getExpenses());
+                showTotal(getTotal(expenses));
             }
         }
     });
 }
 
-function getTotal() {
+export function formatCurrency(value) {
+    return Number(value).toLocaleString('en-US') + ' rsd';
+}
+
+export function getTotal(expensesArray = []) {
     let total = 0;
 
-    for (let e of expenses) {
-        total += Number(e.amount);
+    for (let e of expensesArray) {
+        total += Number(e.amount || 0);
     }
 
     return total;
 }
 
-export function showTotal() {
-    document.getElementById("total").innerText = getTotal();
+export function showTotal(amount) {
+    document.getElementById("total").innerText = formatCurrency(amount);
 }
 
 export function highlightInput(element, className) {

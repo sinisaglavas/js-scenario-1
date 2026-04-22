@@ -15,10 +15,25 @@ body {
     padding: 20px;
 }
 
+#title {
+    display: flex;
+    justify-content: space-between;
+}
+
 h1 {
     text-align: center;
     color: var(--primary-dark);
     margin: 10px 10px;
+}
+
+.form-row {
+    display: flex;       /* Ređa decu horizontalno */
+    gap: 10px;          /* Pravi razmak između inputa, selecta i dugmeta */
+    align-items: center; /* Poravnava ih po vertikalnoj sredini */
+}
+
+#search-name {
+    outline: revert;
 }
 
 /* GLAVNI LAYOUT */

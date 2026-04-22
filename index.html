@@ -7,7 +7,29 @@
 </head>
 <body>
 
-<h1>Expense Tracker</h1>
+<div id="title">
+	<div>
+		<h1>Expense Tracker</h1>
+	</div>
+	<div>
+		<section class="search-panel">
+			<form id="search-form" class="search-form">
+				<div class="form-row">
+					<input type="text" id="search-name" name="searchName" placeholder="Search Name...">
+					<label for="search-category">Search Category:</label>
+					<select id="search-category" name="searchCategory"></select>
+
+					<div class="form-actions">
+						<button type="submit">Search</button>
+						<button type="button" id="reset-search">Reset</button>
+						<button type="button" id="sort-by-name">Sort By Name</button>
+						<button type="button" id="sort-by-amount">Sort By Amount</button>
+					</div>
+				</div>
+			</form>
+		</section>
+	</div>
+</div>
 
 <div class="app-container">
 	<!-- LEVA STRANA: UNOS -->
